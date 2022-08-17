@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: authentication
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_authentication
+    username: postgres
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+
+server:
+  port: 7878
+
+jwt:
+  secret: dicky
+
+integration:
+  list-job: http://dev3.dansmultipro.co.id/api/recruitment/positions.json
+  job-by-id: http://dev3.dansmultipro.co.id/api/recruitment/positions/
