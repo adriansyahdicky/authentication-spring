@@ -1,5 +1,6 @@
 package com.project.authentication.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -23,5 +24,6 @@ public class DataUser {
     private String id;
     private String name;
     private String username;
+    @JsonIgnore
     private String password;
 }

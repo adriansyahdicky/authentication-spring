@@ -2,6 +2,7 @@ package com.project.authentication.service;
 
 import com.project.authentication.dto.RequestCreateUser;
 import com.project.authentication.dto.RequestLoginDto;
+import com.project.authentication.dto.ResponseApplication;
 import com.project.authentication.dto.ResponseLoginDto;
 import com.project.authentication.entity.DataUser;
 import com.project.authentication.repository.DataUserRepository;
@@ -33,23 +34,28 @@ public class UserCrudService {
     private UserService userDetailsService;
 
 
-    public DataUser save(RequestCreateUser requestCreateUser){
-        return dataUserRepository.save(DataUser
-                .builder()
-                        .name(requestCreateUser.getName())
-                        .username(requestCreateUser.getUsername())
-                        .password(passwordEncoder.encode(requestCreateUser.getPassword()))
-                .build());
+    public ResponseApplication<DataUser> save(RequestCreateUser requestCreateUser){
+        try {
+            return ResponseApplication.result(dataUserRepository.save(DataUser
+                    .builder()
+                    .name(requestCreateUser.getName())
+                    .username(requestCreateUser.getUsername())
+                    .password(passwordEncoder.encode(requestCreateUser.getPassword()))
+                    .build()));
+        }catch (Exception ex){
+            log.error("Error save {} ", ex.getMessage());
+            throw ex;
+        }
     }
 
-    public ResponseLoginDto login(RequestLoginDto requestLoginDto) throws Exception {
+    public ResponseApplication<ResponseLoginDto> login(RequestLoginDto requestLoginDto) throws Exception {
         try {
-            authenticate(requestLoginDto.getUsername(), requestLoginDto.getPassword());
             final UserDetails userDetails = userDetailsService
                     .loadUserByUsername(requestLoginDto.getUsername());
-            return ResponseLoginDto.builder()
+            authenticate(requestLoginDto.getUsername(), requestLoginDto.getPassword());
+            return ResponseApplication.result(ResponseLoginDto.builder()
                     .token(jwtTokenUtil.generateToken(userDetails))
-                    .build();
+                    .build());
         }catch (UsernameNotFoundException e){
             log.error("User Not Found {} ", e.getMessage());
             throw e;

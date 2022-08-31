@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class JobController {
@@ -17,13 +15,13 @@ public class JobController {
     private JobService jobService;
 
     @GetMapping(value = "/api/job/list")
-    public ResponseEntity<List<Map<String, Object>>>
+    public ResponseEntity<Object>
     getJobList(){
         return ResponseEntity.ok(jobService.getJobList());
     }
 
     @GetMapping(value = "/api/job/{id}")
-    public ResponseEntity<Map<String, Object>>
+    public ResponseEntity<Object>
     getJobById(@PathVariable("id") String id){
         return ResponseEntity.ok(jobService.getJobById(id));
     }
